@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:test_1/list_data.dart';
 import 'package:test_1/side_menu.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +17,20 @@ class EditData extends StatefulWidget {
 
 class _EditDataState extends State<EditData> {
   final namaController = TextEditingController();
-  final nomorController = TextEditingController();
-  final emailController = TextEditingController();
+  final jenisController = TextEditingController();
+  final warnaController = TextEditingController();
+  final habitatController = TextEditingController();
 
   String url = Platform.isAndroid
-      ? 'http://10.0.2.2/Flutter/index.php'
-      : 'http://localhost/Flutter/index.php';
+      ? 'https://responsi1a.dalhaqq.xyz/ikan'
+      : 'https://responsi1a.dalhaqq.xyz/ikan';
       
-        get email => null;
 
-  Future<dynamic> updateData(String id, String nama, String nomor, String email) async {
+  Future<dynamic> updateData(String id, String nama, String jenis, String warna, String habitat) async {
     // print("updating");
     Map<String, String> headers = {'Content-Type': 'application/json'};
-    String jsonBody = '{"id":$id,"nama": "$nama", "nomor": "$nomor", "email": "$email"}';
-    var response = await http.put(Uri.parse("$url?id=$id"),
+    String jsonBody = '{"id":$id,"nama": "$nama", "jenis": "$jenis", "warna": "$warna",  "habitat": "$habitat"}';
+    var response = await http.put(Uri.parse("$url/$id"),
         headers: headers, body: jsonBody);
 
     if (response.statusCode == 200) {
@@ -42,13 +41,14 @@ class _EditDataState extends State<EditData> {
   }
 
   Future<dynamic> getData(dynamic id) async {
-    final response = await http.get(Uri.parse("$url?id=$id"));
+    final response = await http.get(Uri.parse("$url/$id"));
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = json.decode(response.body)['data'];
       setState(() {
         namaController.text = data['nama'];
-        nomorController.text = data['nomor'];
-        nomorController.text = data['email'];
+        jenisController.text = data['jenis'];
+        warnaController.text = data['warna'];
+        habitatController.text = data['habitat'];
       });
     } else {
       return null;
@@ -65,7 +65,7 @@ class _EditDataState extends State<EditData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Data Kontak'),
+        title: const Text('Edit Data Ikan'),
       ),
       drawer: const SideMenu(),
       body: Container(
@@ -76,33 +76,39 @@ class _EditDataState extends State<EditData> {
             TextField(
               controller: namaController,
               decoration: const InputDecoration(
-                hintText: 'nama',
+                hintText: 'Nama Ikan',
               ),
             ),
             TextField(
-              controller: nomorController,
+              controller: jenisController,
               decoration: const InputDecoration(
-                hintText: 'nomor',
+                hintText: 'Jenis Ikan',
               ),
             ),
             TextField(
-              controller: emailController,
+              controller: warnaController,
               decoration: const InputDecoration(
-                hintText: 'email',
+                hintText: 'Warna Ikan',
+              ),
+            ),
+            TextField(
+              controller: habitatController,
+              decoration: const InputDecoration(
+                hintText: 'Habitat Ikan',
               ),
             ),
             ElevatedButton(
-              child: const Text('Edit Kontak'),
+              child: const Text('Edit Ikan'),
               onPressed: () {
                 String nama = namaController.text;
-                String nomor = nomorController.text;
-                String email = emailController.text;
+                String jenis = jenisController.text;
+                String warna = warnaController.text;
+                String habitat = habitatController.text;
+                // updateData(widget.id,nama, jenis, warna, habitat);
 
-                // updateData(widget.id,nama, nomor);
-
-                updateData(widget.id, nama, nomor, email).then((result) {
+                updateData(widget.id, nama, jenis, warna, habitat).then((result) {
                   print(result);
-                  if (result['pesan'] == 'berhasil') {
+                  if (result['status'] == true) {
                     showDialog(
                         context: context,
                         builder: (context) {

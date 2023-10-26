@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:test_1/home_page.dart';
-import 'package:test_1/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:test_1/list_data.dart';
 
@@ -17,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const LoginPage(),
+        builder: (context) => const ListData(),
       ));
     });
   }
@@ -34,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 20,
             ),
             Text(
-              "Daftar Kontak Panjenengan",
+              "Daftar Ikan Teman Dory",
               style: TextStyle(
                 fontSize: 18.0,
                 color: Colors.black,
@@ -42,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
               textAlign: TextAlign.center,
             ),
             Text(
-              "©Abimanyu",
+              "@A1_Abimanyu",
               style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.black,

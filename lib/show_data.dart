@@ -4,26 +4,27 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class DetailKontak extends StatefulWidget {
+class DetailIkan extends StatefulWidget {
   final dynamic id;
-  const DetailKontak({super.key, this.id});
+  const DetailIkan({super.key, this.id});
 
   @override
-  State<DetailKontak> createState() => DetailKontakState();
+  State<DetailIkan> createState() => DetailIkanState();
 }
 
-class DetailKontakState extends State<DetailKontak> {
-  Map<String, dynamic> datakontak = {};
+class DetailIkanState extends State<DetailIkan> {
+  Map<String, dynamic> dataikan = {};
   String url = Platform.isAndroid
-      ? 'http://10.0.2.2/Flutter/index.php'
-      : 'http://localhost/Flutter/index.php';
+      ? 'https://responsi1a.dalhaqq.xyz/ikan'
+      : 'https://responsi1a.dalhaqq.xyz/ikan';
 
   Future<dynamic> getData(dynamic id) async {
-    final response = await http.get(Uri.parse("$url?id=$id"));
+    final response = await http.get(Uri.parse("$url/$id"));
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
+      print(response.body);
+      final Map<String, dynamic> data = json.decode(response.body)['data'];
       setState(() {
-        datakontak = {"nama": data['nama'], "nomor": data['nomor'], "email": data['email']};
+        dataikan = {"nama": data['nama'], "jenis": data['jenis'], "warna": data['warna'], "habitat": data['habitat']};
       });
     } else {
       return null;
@@ -41,13 +42,14 @@ class DetailKontakState extends State<DetailKontak> {
     return Scaffold(
       drawer: SideMenu(),
       appBar: AppBar(
-        title: Text("Detail Data Kontak"),
+        title: Text("Detail Data Ikan"),
       ),
       body: Column(
         children: [
-          Text("nama : ${datakontak['nama']} "),
-          Text("nomor : ${datakontak['nomor']}"),
-          Text("email : ${datakontak['email']}")
+          Text("nama : ${dataikan['nama']} "),
+          Text("jenis : ${dataikan['jenis']}"),
+          Text("warna : ${dataikan['warna']}"), 
+          Text("habitat : ${dataikan['habitat']}")
         ],
       ),
     );

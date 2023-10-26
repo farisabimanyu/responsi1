@@ -17,10 +17,10 @@ class ListData extends StatefulWidget {
 }
 
 class _ListDataState extends State<ListData> {
-  List<Map<String, String>> daftarkontak = [];
+  List<Map<String, String>> daftartemanDory = [];
   String url = Platform.isAndroid
-      ? 'http://10.0.2.2:8080/Flutter/index.php'
-      : 'http://localhost:8080/Flutter/index.php';
+      ? 'https://responsi1a.dalhaqq.xyz/ikan'
+      : 'https://responsi1a.dalhaqq.xyz/ikan';
   @override
   void initState() {
     super.initState();
@@ -30,12 +30,14 @@ class _ListDataState extends State<ListData> {
   Future<void> fetchData() async {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+      final List<dynamic> data = json.decode(response.body)['data'];
       setState(() {
-        daftarkontak = List<Map<String, String>>.from(data.map((item) {
+        daftartemanDory = List<Map<String, String>>.from(data.map((item) {
           return {
             'nama': item['nama'] as String,
-            'nomor telepon': item['nomor telepon'] as String,
+            'jenis': item['jenis'] as String,
+            'warna': item['warna'] as String,
+            'habitat': item['habitat'] as String,
             'id': item['id'] as String,
           };
         }));
@@ -46,7 +48,7 @@ class _ListDataState extends State<ListData> {
   }
 
   Future deleteData(int id) async {
-    final response = await http.delete(Uri.parse('$url?id=$id'));
+    final response = await http.delete(Uri.parse('$url/$id'));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -58,7 +60,7 @@ class _ListDataState extends State<ListData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List Data Kontak'),
+        title: const Text('List Ikan Teman Dory'),
       ),
       drawer: const SideMenu(),
       body: Column(children: <Widget>[
@@ -71,16 +73,16 @@ class _ListDataState extends State<ListData> {
               ),
             );
           },
-          child: const Text('Tambah Kontak'),
+          child: const Text('Tambah Teman'),
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: daftarkontak.length,
+            itemCount: daftartemanDory.length,
             itemBuilder: (context, index) {
-              var id = daftarkontak[index]['id'];
+              var id = daftartemanDory[index]['id'];
               return ListTile(
-                title: Text(daftarkontak[index]['nama']!),
-                subtitle: Text('Nomor Telepon: ${daftarkontak[index]['nomor telepon']}'),
+                title: Text(daftartemanDory[index]['nama']!),
+                subtitle: Text('jenis: ${daftartemanDory[index]['jenis']}'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -88,7 +90,7 @@ class _ListDataState extends State<ListData> {
                       icon: Icon(Icons.visibility),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => DetailKontak(id: id)));
+                            builder: (context) => DetailIkan(id: daftartemanDory[index]['id'])));
                       },
                     ),
                     IconButton(
@@ -96,7 +98,7 @@ class _ListDataState extends State<ListData> {
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => EditData(
-                                  id: id,
+                                  id: daftartemanDory[index]['id'],
                                 )));
                       },
                     ),
@@ -104,7 +106,7 @@ class _ListDataState extends State<ListData> {
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         deleteData(int.parse(id!)).then((result) {
-                          if (result['pesan'] == 'berhasil') {
+                          if (result['status'] == true) {
                             showDialog(
                                 context: context,
                                 builder: (context) {

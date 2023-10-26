@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:test_1/list_data.dart';
 import 'package:test_1/side_menu.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +14,18 @@ class TambahData extends StatefulWidget {
 
 class _TambahDataState extends State<TambahData> {
   final namaController = TextEditingController();
-  final nomorController = TextEditingController();
-  final emailController = TextEditingController();
+  final jenisController = TextEditingController();
+  final warnaController = TextEditingController();
+  final habitatController = TextEditingController();
 
-  Future postData(String nama, String nomor, String email) async {
+  Future postData(String nama, String jenis, String warna, String habitat) async {
     // print(nama);
     String url = Platform.isAndroid
-        ? 'http://10.0.2.2/Flutter/index.php'
-        : 'http://localhost/Flutter/index.php';
+        ? 'https://responsi1a.dalhaqq.xyz/ikan'
+        : 'https://responsi1a.dalhaqq.xyz/ikan';
 
     Map<String, String> headers = {'Content-Type': 'application/json'};
-    String jsonBody = '{"nama": "$nama", "nomor": "$nomor", "email": "$email"}';
+    String jsonBody = '{"nama": "$nama", "jenis": "$jenis", "warna": "$warna", "habitat": "$habitat"}';
     var response = await http.post(
       Uri.parse(url),
       headers: headers,
@@ -43,7 +43,7 @@ class _TambahDataState extends State<TambahData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Data Kontak'),
+        title: const Text('Tambah Data Ikan'),
       ),
       drawer: const SideMenu(),
       body: Container(
@@ -54,32 +54,38 @@ class _TambahDataState extends State<TambahData> {
             TextField(
               controller: namaController,
               decoration: const InputDecoration(
-                hintText: 'Nama Kontak',
+                hintText: 'Nama Ikan',
               ),
             ),
             TextField(
-              controller: nomorController,
+              controller: jenisController,
               decoration: const InputDecoration(
-                hintText: 'Nomor',
+                hintText: 'Jenis Ikan',
               ),
             ),
             TextField(
-              controller: emailController,
+              controller: warnaController,
               decoration: const InputDecoration(
-                hintText: 'Email',
+                hintText: 'Warna Ikan',
+              ),
+            ),
+            TextField(
+              controller: habitatController,
+              decoration: const InputDecoration(
+                hintText: 'Habitat Ikan',
               ),
             ),
             ElevatedButton(
-              child: const Text('Tambah Kontak'),
+              child: const Text('Tambah Ikan'),
               onPressed: () {
-                print("Hello");
                 String nama = namaController.text;
-                String nomor = nomorController.text;
-                String email = emailController.text;
+                String jenis = jenisController.text;
+                String warna = warnaController.text;
+                String habitat = habitatController.text;
                 // print(nama);
-                postData(nama, nomor, email).then((result) {
+                postData(nama, jenis, warna, habitat).then((result) {
                   //print(result['pesan']);
-                  if (result['pesan'] == 'berhasil') {
+                  if (result['status'] == true) {
                     showDialog(
                         context: context,
                         builder: (context) {

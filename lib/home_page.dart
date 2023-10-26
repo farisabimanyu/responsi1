@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
         title: const Text('Home Page'),
       ),
       drawer: const SideMenu(),
-      body: const Center(child: Text('Daftar Kontak')),
+      body: const Center(child: Text('Daftar Ikan Teman Dory')),
     );
   }
 }

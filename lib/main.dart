@@ -14,13 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Daftar Kontak Panjenengan',
+      title: 'Data Ikan Teman Dory',
       home: SplashScreen(),
     );
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -32,20 +30,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController namaController = TextEditingController();
-  TextEditingController nomorController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController jenisController = TextEditingController();
+  TextEditingController warnaController = TextEditingController();
+  TextEditingController habitatController = TextEditingController();
   
   get http => null;
-  
-  get email => null;
 
-  Future postData(String nama, String nomor, String email) async {
+
+  Future postData(String nama, String jenis, String warna, String habitat) async {
     String url = Platform.isAndroid
-        ? 'http://10.0.2.2/Flutter/index.php'
-        : 'http://localhost/Flutter/index.php';
+        ? 'https://responsi1a.dalhaqq.xyz/ikan'
+        : 'https://responsi1a.dalhaqq.xyz/ikan';
 
     Map<String, String> headers = {'Content-Type': 'application/json'};
-    String jsonBody = '{"nama": "$nama", "nomor": "$nomor", "email": "$email}';
+    String jsonBody = '{"nama": "$nama", "jenis": "$jenis", "warna": "$warna, "habitat": "$habitat}';
     var response = await http.post(
       Uri.parse(url),
       headers: headers,
@@ -59,14 +57,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future updateData(int id, String nama, String nomor) async {
+  Future updateData(int id, String nama, String jenis, String warna, String habitat) async {
     final response = await http.put(
       Uri.parse('http://localhost/api_flutter/index.php'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(
-          <String, dynamic>{'id': id, 'nama': nama, 'nomor': nomor, 'email': email}),
+          <String, dynamic>{'id': id, 'nama': nama, 'jenis': jenis, 'warna': warna, 'habitat': habitat}),
     );
 
     if (response.statusCode == 200) {
